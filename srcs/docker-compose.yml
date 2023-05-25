@@ -5,10 +5,9 @@ services:
     build: requirements/nginx/
     container_name: nginx
     ports:
-      - 80:80
       - 443:443
     volumes:
-      - ../data:/var/www/html
+      - /home/osyalcin/data/wp:/var/www/html
     depends_on:
       - wordpress
     networks:
@@ -18,10 +17,8 @@ services:
   wordpress:
     build: requirements/wordpress/
     container_name: wordpress
-    ports:
-      - 9000:9000
     volumes:
-      - ../data:/var/www/html
+      - /home/osyalcin/data/wp:/var/www/html
     depends_on:
       - mariadb
     networks:
@@ -44,10 +41,8 @@ services:
   mariadb:
     build: requirements/mariadb/
     container_name: mariadb
-    ports:
-      - 3306:3306
     volumes:
-      - ../maria:/var/lib/mysql
+      - /home/osyalcin/data/maria:/var/lib/mysql
     networks:
       - asgard
     restart: always
