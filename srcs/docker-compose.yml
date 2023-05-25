@@ -4,10 +4,11 @@ services:
   nginx:
     build: requirements/nginx/
     container_name: nginx
+    image: nginx
     ports:
       - 443:443
     volumes:
-      - /home/osyalcin/data/wp:/var/www/html
+      - wp:/var/www/html
     depends_on:
       - wordpress
     networks:
@@ -15,10 +16,11 @@ services:
     restart: always
 
   wordpress:
+    image: wordpress
     build: requirements/wordpress/
     container_name: wordpress
     volumes:
-      - /home/osyalcin/data/wp:/var/www/html
+      - wp:/var/www/html
     depends_on:
       - mariadb
     networks:
@@ -39,10 +41,11 @@ services:
       WP_EMAIL:         ${WP_EMAIL}
 
   mariadb:
+    image: mariadb
     build: requirements/mariadb/
     container_name: mariadb
     volumes:
-      - /home/osyalcin/data/maria:/var/lib/mysql
+      - db:/var/lib/mysql
     networks:
       - asgard
     restart: always
@@ -52,6 +55,21 @@ services:
       WP_DATABASE_USR:  ${WP_DATABASE_USR}
       WP_DATABASE_PWD:  ${WP_DATABASE_PWD}
 
+volumes:
+  wp:
+    driver: local
+    name: WordPress
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/osyalcin/data/wordpress
+  db:
+    driver: local
+    name: DB
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/osyalcin/data/mariadb
 
 networks:
   asgard:
